@@ -1,0 +1,65 @@
+name: Release and Publish
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'chore(release)')"
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: 安装依赖
+        run: yarn install --frozen-lockfile
+
+      - name: 运行测试
+        run: yarn test
+
+      - name: 设置 Git 用户
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: 生成版本和 changelog
+        run: npx standard-version
+
+      - name: 推送变更和标签
+        run: |
+          git push --follow-tags origin master
+
+      - name: 发布到 npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: 创建 GitHub Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            CHANGELOG.md
+          body: |
+            Changes in this Release
+            - 查看 CHANGELOG.md 获取详细更新内容
+          draft: false
+          prerelease: false 
