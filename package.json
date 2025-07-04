@@ -1,0 +1,22 @@
+{
+  "name": "ansi-to-web-style",
+  "version": "0.0.1",
+  "description": "convert ANSI color codes log to web console supported format specifier",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zcWSR/ansi-to-web-style.git"
+  },
+  "keywords": [
+    "ANSI"
+  ],
+  "author": "zcWSR",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zcWSR/ansi-to-web-style/issues"
+  },
+  "homepage": "https://github.com/zcWSR/ansi-to-web-style#readme"
+}
