@@ -40,8 +40,26 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
+      - name: 安装 jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: 检查是否有 breaking change
+        id: breaking
+        run: |
+          if git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:%s | grep -E '!:|BREAKING CHANGE'; then
+            echo "has_breaking=yes" >> $GITHUB_OUTPUT
+          else
+            echo "has_breaking=no" >> $GITHUB_OUTPUT
+          fi
+
       - name: 生成版本和 changelog
-        run: npx standard-version
+        run: |
+          VERSION=$(jq -r .version package.json)
+          if [[ "$VERSION" =~ ^0\. && "${{ steps.breaking.outputs.has_breaking }}" == "yes" ]]; then
+            npx standard-version --release-as 1.0.0
+          else
+            npx standard-version
+          fi
 
       - name: 推送变更和标签
         run: |
