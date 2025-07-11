@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/zcWSR/ansi-to-web-style/compare/v1.0.0...v1.1.0) (2025-07-11)
+
+
+### Features
+
+* add polyfill ([987ce9d](https://github.com/zcWSR/ansi-to-web-style/commit/987ce9d396dbc78a2c9964bd83026f53b9cda87f))
+
 ## [1.0.0](https://github.com/zcWSR/ansi-to-web-style/compare/v0.1.0...v1.0.0) (2025-07-04)
 
 
