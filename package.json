@@ -4,7 +4,10 @@
   "description": "convert ANSI color codes log to web console supported format specifier",
   "main": "src/index.mjs",
   "type": "module",
-  "module": "src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./polyfill": "./src/polyfill.mjs"
+  },
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "release": "standard-version"

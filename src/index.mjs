@@ -251,46 +251,24 @@ export function consoleLogAnsiParams(...args) {
     return args
   }
 
-  // Process string arguments, merge them into a single formatted string
   let combinedFormatText = ''
   const allStyles = []
   let hasAnsiContent = false
 
   for (let i = 0; i < stringArgs.length; i++) {
-    const arg = stringArgs[i]
-    const result = ansiToStyle(arg)
-
-    if (i === 0) {
-      // First string argument
-      if (result.styles.length > 0) {
-        // Has ANSI style
-        combinedFormatText += result.text
-        allStyles.push(...result.styles)
-        hasAnsiContent = true
-      } else {
-        // Plain string, add directly without %c
-        combinedFormatText += arg
-      }
-    } else {
-      // Subsequent string arguments, add space separator
+    if (i > 0) {
+      // Add %c and space between arguments to prevent style inheritance
       combinedFormatText += '%c '
       allStyles.push('')
-
-      if (result.styles.length > 0) {
-        // String with ANSI style
-        combinedFormatText += result.text
-        allStyles.push(...result.styles)
-        hasAnsiContent = true
-      } else {
-        // Plain string
-        combinedFormatText += `%c${arg}`
-        allStyles.push('')
-        hasAnsiContent = true
-      }
+    }
+    const result = ansiToStyle(stringArgs[i])
+    combinedFormatText += result.text
+    if (result.styles.length > 0) {
+      allStyles.push(...result.styles)
+      hasAnsiContent = true
     }
   }
 
-  // Build final parameter array
   if (hasAnsiContent) {
     return [combinedFormatText, ...allStyles, ...nonStringArgs]
   } else {
